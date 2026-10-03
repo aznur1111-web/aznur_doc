@@ -6,124 +6,83 @@
 <title>Aznur Document Studio</title>
 <meta name="description" content="Professional PDF and document processing directly in your browser. Merge, split, rotate, convert, compress, OCR, crop, reorder, add page numbers, and more.">
 <meta name="referrer" content="no-referrer">
-
-<!-- Client-side libraries only -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
 <style>
-:root{
-  --bg:#fafafa;--surface:#fff;--border:#e7e5e4;--text:#1c1917;--muted:#57534e;
-  --accent:#f59e0b;--accent-h:#d97706;--ok:#10b981;--err:#ef4444;--info:#3b82f6;
-  --r:8px;--rl:12px;--sh:0 1px 2px rgba(0,0,0,.05)
-}
+:root{--bg:#fafafa;--surface:#fff;--border:#e7e5e4;--text:#1c1917;--muted:#57534e;--accent:#f59e0b;--accent-h:#d97706;--ok:#10b981;--err:#ef4444;--info:#3b82f6;--r:6px;--rl:10px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
-.container{max-width:980px;margin:0 auto;padding:40px 20px}
-header{text-align:center;margin-bottom:32px}
-h1{font-size:2.5rem;font-weight:700;margin-bottom:10px}
-.subtitle{font-size:1.05rem;color:var(--muted);max-width:680px;margin:0 auto}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px;margin-bottom:20px;box-shadow:var(--sh)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
-.grid-wide{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.fg{display:flex;flex-direction:column;gap:7px}
-label{font-size:.82rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.help{font-size:.78rem;color:var(--muted);line-height:1.4}
-select,input[type=number],input[type=text],input[type=password],input[type=color]{
-  width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:1rem;background:#fff
-}
-input[type=color]{height:42px;padding:4px}
-select:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(245,158,11,.12)}
-.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.cb{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:.9rem;color:var(--muted)}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45;font-size:14px}
+.container{max-width:760px;margin:0 auto;padding:24px 16px}
+header{text-align:center;margin-bottom:20px}
+h1{font-size:1.7rem;font-weight:700;margin-bottom:4px}
+.subtitle{font-size:.9rem;color:var(--muted);max-width:540px;margin:0 auto}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.grid-wide{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.fg{display:flex;flex-direction:column;gap:6px}
+label{font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.help{font-size:.72rem;color:var(--muted);line-height:1.35}
+select,input[type=number],input[type=text],input[type=password],input[type=color]{width:100%;padding:7px 9px;border:1px solid var(--border);border-radius:var(--r);font-size:.9rem;background:#fff}
+input[type=color]{height:34px;padding:3px}
+select:focus,input:focus{outline:none;border-color:var(--accent)}
+.qv{font-weight:700;color:var(--accent);text-transform:none;letter-spacing:0}
+.lbl{display:flex;justify-content:space-between;align-items:center}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cb{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:.82rem;color:var(--muted)}
 .cb input{width:auto}
-#notice{font-size:.85rem;color:var(--muted);margin-bottom:12px;min-height:1.2em}
+.cb label{text-transform:none;font-weight:500;font-size:.8rem;letter-spacing:0}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:999px;background:var(--border);outline:none;cursor:pointer;padding:0;border:0;margin:6px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+input[type=range]:disabled{opacity:.5;cursor:not-allowed}
+.save-row{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#folderStatus,#notice{font-size:.78rem;color:var(--muted)}
+#notice{margin-bottom:10px;min-height:1em}
 .notice-info{color:var(--info)!important}.notice-ok{color:var(--ok)!important}.notice-err{color:var(--err)!important}
-.upload-zone{
-  background:var(--surface);border:2px dashed var(--border);border-radius:var(--rl);padding:54px 20px;
-  text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px;user-select:none
-}
+.upload-zone{background:var(--surface);border:2px dashed var(--border);border-radius:var(--rl);padding:28px 16px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px;user-select:none}
 .upload-zone:hover,.upload-zone.dragover{border-color:var(--accent);background:#fffbeb}
-.upload-icon{font-size:3rem;margin-bottom:15px}
-.btn{
-  background:var(--text);color:#fff;padding:11px 24px;border-radius:var(--r);font-weight:600;
-  border:none;cursor:pointer;font-size:1rem;margin-top:10px
-}
+.upload-zone h2{font-size:1.05rem}
+.upload-icon{font-size:1.9rem;margin-bottom:6px}
+.btn{background:var(--text);color:#fff;padding:8px 18px;border-radius:var(--r);font-weight:600;border:none;cursor:pointer;font-size:.88rem;margin-top:8px}
 .btn:hover{background:#333}.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn.primary{background:var(--accent);color:#fff}.btn.primary:hover{background:var(--accent-h)}
-.btn.secondary{background:transparent;color:var(--text);border:1px solid var(--border);margin-left:8px}
+.btn.primary{background:var(--accent)}.btn.primary:hover{background:var(--accent-h)}
+.btn.secondary{background:transparent;color:var(--text);border:1px solid var(--border);margin-left:6px}
 .btn.secondary:hover{background:var(--bg)}
 .hidden{display:none}
-.setting-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px}
-.setting-title{font-size:1.1rem;font-weight:700}
-.reset-link{border:0;background:none;color:var(--muted);cursor:pointer;font-size:.8rem;text-decoration:underline}
+.setting-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
+.setting-title{font-size:.95rem;font-weight:700}
+.reset-link{border:0;background:none;color:var(--muted);cursor:pointer;font-size:.75rem;text-decoration:underline}
 .file-section{display:none}
-.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;gap:12px;flex-wrap:wrap}
-.sec-title{font-size:1.25rem;font-weight:700}
-.file-list{display:flex;flex-direction:column;gap:10px}
-.file-item{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;
-  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap
-}
-.file-item.processing{border-left:4px solid var(--accent)}
-.file-item.completed{border-left:4px solid var(--ok)}
-.file-item.failed{border-left:4px solid var(--err)}
-.file-item.queued{border-left:4px solid var(--border)}
-.file-info{flex:1;min-width:230px}
-.file-name{font-weight:600;margin-bottom:4px;word-break:break-all}
-.file-meta{font-size:.82rem;color:var(--muted);display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-.badge{padding:2px 8px;border-radius:4px;font-size:.72rem;font-weight:700;text-transform:uppercase}
+.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+.sec-title{font-size:1.05rem;font-weight:700}
+.file-list{display:flex;flex-direction:column;gap:6px}
+.file-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.file-item.processing{border-left:3px solid var(--accent)}.file-item.completed{border-left:3px solid var(--ok)}
+.file-item.failed{border-left:3px solid var(--err)}.file-item.queued{border-left:3px solid var(--border)}
+.file-info{flex:1;min-width:180px}
+.file-name{font-weight:600;font-size:.88rem;margin-bottom:2px;word-break:break-all}
+.file-meta{font-size:.78rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.badge{padding:1px 6px;border-radius:4px;font-size:.68rem;font-weight:700;text-transform:uppercase}
 .badge-queued{background:#f3f4f6;color:#4b5563}.badge-processing{background:#ffedd5;color:#9a3412}
 .badge-completed{background:#d1fae5;color:#065f46}.badge-failed{background:#fee2e2;color:#991b1b}
-.file-actions{display:flex;gap:6px;flex-wrap:wrap}
-.action-btn{
-  background:transparent;border:1px solid var(--border);color:var(--text);padding:6px 10px;
-  border-radius:4px;font-size:.82rem;cursor:pointer;text-decoration:none;font-weight:600
-}
+.file-actions{display:flex;gap:5px;flex-wrap:wrap}
+.action-btn{background:transparent;border:1px solid var(--border);color:var(--text);padding:4px 10px;border-radius:4px;font-size:.78rem;cursor:pointer;text-decoration:none;font-weight:600}
 .action-btn:hover{background:var(--bg)}.action-btn:disabled{opacity:.5;cursor:not-allowed}
 .action-danger{color:var(--err)}
-.queue-actions{display:flex;gap:8px;flex-wrap:wrap}
-.result-bar{
-  display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  background:#fffbeb;border:1px solid #fde68a;border-radius:var(--r);padding:12px 14px;margin-top:12px
-}
-.result-name{font-weight:600}.result-meta{font-size:.82rem;color:var(--muted)}
-.stats-bar{
-  display:none;justify-content:space-between;flex-wrap:wrap;gap:8px;background:var(--surface);
-  padding:14px 18px;border-radius:var(--r);border:1px solid var(--border);margin-bottom:20px;font-size:.88rem;color:var(--muted)
-}
-.stat-item{display:flex;gap:5px}.stat-item b{color:var(--text)}
-.stats-group+.stats-group{margin-top:22px}
-.stats-label{
-  font-size:.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;
-  margin-bottom:12px;display:flex;justify-content:space-between;align-items:center
-}
-.stat-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:20px 16px;text-align:center}
-.stat-card .l{font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
-.stat-card .v{font-size:1.55rem;font-weight:700}
-.tip{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:11px 13px;border-radius:var(--r);font-size:.82rem;margin-top:12px}
-
-input[type=range]{
-  -webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;
-  background:var(--border);outline:none;padding:0;border:0;cursor:pointer
-}
-input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;
-  background:var(--accent);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3)
-}
-input[type=range]::-moz-range-thumb{
-  width:20px;height:20px;border-radius:50%;background:var(--accent);border:2px solid #fff;
-  box-shadow:0 1px 3px rgba(0,0,0,.3)
-}
-input[type=range]:disabled{opacity:.5;cursor:not-allowed}
-input[type=range]:focus-visible{box-shadow:0 0 0 3px rgba(245,158,11,.25)}
-  
-footer{margin-top:46px;text-align:center;color:var(--muted);font-size:.85rem;padding-top:20px;border-top:1px solid var(--border)}
-@media(max-width:650px){
-  .container{padding:28px 14px}h1{font-size:2rem}.upload-zone{padding:42px 16px}
-  .btn.secondary{margin-left:0}.file-actions{width:100%}.file-actions .action-btn{flex:1}
-}
+.queue-actions{display:flex;gap:6px;flex-wrap:wrap}
+.result-bar{display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#fffbeb;border:1px solid #fde68a;border-radius:var(--r);padding:9px 12px;margin-top:8px}
+.result-name{font-weight:600;font-size:.88rem}.result-meta{font-size:.78rem;color:var(--muted)}
+.stats-bar{display:none;justify-content:space-between;flex-wrap:wrap;gap:6px;background:var(--surface);padding:9px 14px;border-radius:var(--r);border:1px solid var(--border);margin-bottom:14px;font-size:.82rem;color:var(--muted)}
+.stat-item{display:flex;gap:4px}.stat-item b{color:var(--text)}
+.stats-group+.stats-group{margin-top:14px}
+.stats-label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.stat-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center}
+.stat-card .l{font-size:.68rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.stat-card .v{font-size:1.2rem;font-weight:700}
+.tip{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:8px 11px;border-radius:var(--r);font-size:.78rem;margin-top:10px}
+footer{margin-top:28px;text-align:center;color:var(--muted);font-size:.78rem;padding-top:14px;border-top:1px solid var(--border)}
+@media(max-width:600px){h1{font-size:1.45rem}.btn.secondary{margin-left:0}.file-actions{width:100%}.file-actions .action-btn{flex:1}}
 </style>
 </head>
 
@@ -131,35 +90,47 @@ footer{margin-top:46px;text-align:center;color:var(--muted);font-size:.85rem;pad
 <div class="container">
 <header>
   <h1>Aznur Document Studio</h1>
-  <p class="subtitle">Professional PDF processing directly in your browser. Your files stay on your device while you merge, split, convert, edit, compress, and extract information.</p>
+  <p class="subtitle">PDF processing directly in your browser. Your files stay on your device while you merge, split, convert, edit, compress, and extract information.</p>
 </header>
 
 <div class="card">
-  <div class="fg" style="max-width:420px">
-    <label for="toolSelect">Select Tool</label>
-    <select id="toolSelect">
-      <optgroup label="Organize & Edit">
-        <option value="merge">Merge PDF</option>
-        <option value="split">Split PDF</option>
-        <option value="extract">Extract Pages</option>
-        <option value="delete">Delete Pages</option>
-        <option value="reorder">Reorder Pages</option>
-        <option value="rotate">Rotate PDF</option>
-        <option value="watermark">Add Watermark</option>
-        <option value="crop">Crop Pages</option>
-        <option value="pagenumbers">Add Page Numbers</option>
-        <option value="metadata">Edit PDF Metadata</option>
-        <option value="flatten">Flatten PDF Forms</option>
-      </optgroup>
-      <optgroup label="Convert">
-        <option value="img2pdf">Images to PDF</option>
-        <option value="pdf2img">PDF to Images</option>
-        <option value="ocr">OCR & Extract Text</option>
-      </optgroup>
-      <optgroup label="Optimize">
-        <option value="compress">Compress PDF</option>
-      </optgroup>
-    </select>
+  <div class="grid">
+    <div class="fg">
+      <label for="toolSelect">Tool</label>
+      <select id="toolSelect">
+        <optgroup label="Organize &amp; Edit">
+          <option value="merge">Merge PDF</option>
+          <option value="split">Split PDF</option>
+          <option value="extract">Extract Pages</option>
+          <option value="delete">Delete Pages</option>
+          <option value="reorder">Reorder Pages</option>
+          <option value="rotate">Rotate PDF</option>
+          <option value="watermark">Add Watermark</option>
+          <option value="crop">Crop Pages</option>
+          <option value="pagenumbers">Add Page Numbers</option>
+          <option value="metadata">Edit PDF Metadata</option>
+          <option value="flatten">Flatten PDF Forms</option>
+        </optgroup>
+        <optgroup label="Convert">
+          <option value="img2pdf">Images to PDF</option>
+          <option value="pdf2img">PDF to Images</option>
+          <option value="ocr">OCR &amp; Extract Text</option>
+        </optgroup>
+        <optgroup label="Optimize">
+          <option value="compress">Compress PDF</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="fg">
+      <div class="lbl"><label for="coreSelect">CPU Workers</label><span id="coreVal" class="qv">1 / 1</span></div>
+      <input type="range" id="coreSelect" min="1" max="1" step="1" value="1">
+      <div class="help" id="coreHelp"></div>
+    </div>
+  </div>
+  <div class="save-row">
+    <button class="action-btn" id="chooseFolderBtn" type="button">Choose output folder</button>
+    <button class="action-btn hidden" id="clearFolderBtn" type="button">Use downloads instead</button>
+    <span id="folderStatus"></span>
   </div>
 </div>
 
@@ -171,44 +142,22 @@ footer{margin-top:46px;text-align:center;color:var(--muted);font-size:.85rem;pad
   <div id="settingsPanel"></div>
 </div>
 
-<div class="card">
-  <div class="fg">
-    <label>Save Location</label>
-    <div class="row" style="flex-wrap:wrap;gap:12px">
-      <button class="action-btn" id="chooseFolderBtn" type="button">Choose output folder</button>
-      <button class="action-btn hidden" id="clearFolderBtn" type="button">Use downloads instead</button>
-      <span id="folderStatus" style="font-size:.85rem;color:var(--muted)"></span>
-    </div>
-  </div>
-</div>
-
- <div class="card">
-  <div class="fg">
-    <label for="coreSelect" style="display:flex;justify-content:space-between;align-items:center">
-      <span>CPU Workers</span>
-      <span id="coreVal" style="color:var(--text);font-size:.95rem;text-transform:none;letter-spacing:0">1 / 1</span>
-    </label>
-    <input type="range" id="coreSelect" min="1" max="1" step="1" value="1">
-    <div class="help" id="coreHelp"></div>
-  </div>
-</div>
-
 <div class="upload-zone" id="dropZone">
   <div class="upload-icon">📁</div>
   <h2 id="dropTitle">Drop PDF files here</h2>
-  <p id="dropHint" style="color:var(--muted);margin-bottom:14px">or click to browse files</p>
+  <p id="dropHint" style="color:var(--muted);font-size:.82rem">or click to browse files</p>
   <button class="btn" id="uploadBtn" type="button">Select Files</button>
   <button class="btn secondary" id="pickFolderBtn" type="button">Select a Folder</button>
   <input type="file" id="fileInput" class="hidden" multiple accept=".pdf,application/pdf">
   <input type="file" id="folderInput" class="hidden" webkitdirectory multiple>
 </div>
 
-<div class="row" style="justify-content:center;margin-bottom:14px">
-  <button class="btn primary" id="processBtn" type="button" disabled>Process Files</button>
-  <button class="btn secondary" id="clearBtn" type="button">Clear List</button>
+<div class="row" style="justify-content:center;margin-bottom:10px">
+  <button class="btn primary" id="processBtn" type="button" style="margin-top:0" disabled>Process Files</button>
+  <button class="btn secondary" id="clearBtn" type="button" style="margin-top:0">Clear List</button>
 </div>
 
-<p id="notice" aria-live="polite"></p>
+<p id="notice" aria-live="polite" style="text-align:center"></p>
 
 <div class="stats-bar" id="statsBar">
   <div class="stat-item"><span>Processing:</span><b id="activeCount">0</b></div>
@@ -235,14 +184,10 @@ footer{margin-top:46px;text-align:center;color:var(--muted);font-size:.85rem;pad
   </div>
 </div>
 
-<div class="card" style="margin-top:30px" aria-label="Processing statistics">
-  <h3 style="font-size:1.1rem;margin-bottom:4px">Processing Statistics</h3>
-  <p style="font-size:.85rem;color:var(--muted);margin-bottom:18px">Counts and saved-space statistics are stored only in your browser.</p>
+<div class="card" style="margin-top:24px">
+  <h3 style="font-size:.95rem;margin-bottom:10px">Processing Statistics</h3>
   <div class="stats-group">
-    <div class="stats-label">
-      <span>This Session</span>
-      <button class="action-btn" id="statsResetBtn" type="button">Reset Session</button>
-    </div>
+    <div class="stats-label"><span>This Session</span><button class="action-btn" id="statsResetBtn" type="button">Reset</button></div>
     <div class="grid">
       <div class="stat-card"><div class="l">Documents Processed</div><div class="v" id="sessionProcessed">0</div></div>
       <div class="stat-card"><div class="l">Space Saved</div><div class="v" id="sessionSaved">0 Bytes</div></div>
@@ -250,7 +195,7 @@ footer{margin-top:46px;text-align:center;color:var(--muted);font-size:.85rem;pad
     </div>
   </div>
   <div class="stats-group">
-    <div class="stats-label"><span>All Time</span></div>
+    <div class="stats-label"><span>All Time (This Browser)</span></div>
     <div class="grid">
       <div class="stat-card"><div class="l">Documents Processed</div><div class="v" id="allProcessed">0</div></div>
       <div class="stat-card"><div class="l">Space Saved</div><div class="v" id="allSaved">0 Bytes</div></div>
@@ -261,7 +206,7 @@ footer{margin-top:46px;text-align:center;color:var(--muted);font-size:.85rem;pad
 
 <footer>
   <p>&copy; Aznur Document Studio. Processing happens locally in your browser; files are not uploaded by this page.</p>
-  <p style="margin-top:8px;font-size:.8rem">Powered by pdf-lib, PDF.js, JSZip, FileSaver.js, and Tesseract.js</p>
+  <p style="margin-top:4px">Powered by pdf-lib, PDF.js, JSZip, FileSaver.js, and Tesseract.js</p>
 </footer>
 </div>
 
@@ -278,6 +223,34 @@ const downloadAllBtn = $('downloadAllBtn'), batchResult = $('batchResult');
 const batchDownloadBtn = $('batchDownloadBtn');
 const notice = $('notice');
 const folderInput = $('folderInput');
+
+function lsGet(k){ try{ return localStorage.getItem(k); }catch{ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch{} }
+
+/* ---------- CPU workers slider ---------- */
+const CORES_KEY = 'aznurDocStudioCores_v1';
+const detectedCores = Math.max(1, Number(navigator.hardwareConcurrency) || 2);
+const coreSelect = $('coreSelect');
+function paintCores(){
+  const v = Number(coreSelect.value);
+  $('coreVal').textContent = v + ' / ' + detectedCores;
+  const pct = detectedCores > 1 ? ((v - 1) / (detectedCores - 1)) * 100 : 100;
+  coreSelect.style.background = `linear-gradient(to right, var(--accent) ${pct}%, var(--border) ${pct}%)`;
+}
+(function initCores(){
+  const saved = parseInt(lsGet(CORES_KEY), 10);
+  const fallback = Math.max(1, Math.floor(detectedCores / 2));
+  coreSelect.min = 1; coreSelect.max = detectedCores;
+  coreSelect.value = String(saved >= 1 && saved <= detectedCores ? saved : fallback);
+  $('coreHelp').textContent = `Browser reports ${detectedCores} logical CPU thread(s). Files processed at the same time.`;
+  coreSelect.addEventListener('input', paintCores);
+  coreSelect.addEventListener('change', () => lsSet(CORES_KEY, coreSelect.value));
+  paintCores();
+})();
+function getCores(){
+  const n = parseInt(coreSelect.value, 10);
+  return Math.min(detectedCores, Math.max(1, n || 1));
+}
 
 /* ---------- output folder (File System Access API) ---------- */
 let outDir = null;
@@ -320,7 +293,7 @@ async function getDir(dirs){
   }
   return d;
 }
-// Writes a blob into the chosen folder (never overwrites: adds _2, _3... if the name exists).
+// Never overwrites: adds _2, _3... if the name exists.
 async function saveToFolder(blob, name, dirs){
   const dir = await getDir(dirs);
   const prefix = dirs.join('/') + '/';
@@ -345,9 +318,6 @@ folderInput.addEventListener('change', () => { if(!isProcessing && folderInput.f
 
 const SETTINGS_KEY = 'aznurDocStudioSettings_v2';
 const LAST_TOOL_KEY = 'aznurDocStudioLastTool_v1';
-
-function lsGet(k){ try{ return localStorage.getItem(k); }catch{ return null; } }
-function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch{} }
 
 let currentTool = lsGet(LAST_TOOL_KEY) || 'merge';
 if (![...toolSelect.options].some(o => o.value === currentTool)) currentTool = 'merge';
@@ -757,7 +727,7 @@ function renderUI(){
   filesSection.style.display=any?'block':'none';
   $('statsBar').style.display=any?'flex':'none';
   processBtn.disabled = isProcessing || !any;
-  if (typeof coreSelect !== 'undefined') coreSelect.disabled = isProcessing;
+  coreSelect.disabled = isProcessing;
   downloadAllBtn.disabled = isProcessing || !(batchOutput || items.some(i=>i.blob));
   downloadAllBtn.style.display = outDir ? 'none' : '';
   batchResult.style.display=batchOutput?'flex':'none';
@@ -905,7 +875,7 @@ function parsePageSpec(spec,count){
 }
 // Strict parser: an empty value is an error (never means "all pages").
 function parsePageSpecStrict(spec,count,what='pages'){
-  if(!String(spec||'').trim() || String(spec).trim().toLowerCase()==='all' && false) throw new Error(`Enter the ${what}.`);
+  if(!String(spec||'').trim()) throw new Error(`Enter the ${what}.`);
   const r=parsePageSpec(spec,count);
   if(!r.length) throw new Error(`Enter the ${what}.`);
   return r;
@@ -1321,41 +1291,7 @@ async function loadTesseract(){
   if(!tessPromise)tessPromise=loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js').catch(e=>{tessPromise=null;throw e;});
   return tessPromise;
 }
-/* ---------- CPU core selection ---------- */
-const CORES_KEY = 'aznurDocStudioCores_v1';
-const detectedCores = Math.max(1, Number(navigator.hardwareConcurrency) || 2);
-const coreSelect = $('coreSelect');
 
-(function initCores(){
-  const saved = parseInt(lsGet(CORES_KEY), 10);
-  const fallback = Math.max(1, Math.floor(detectedCores / 2));
-  const start = saved >= 1 && saved <= detectedCores ? saved : fallback;
-
-  coreSelect.min = 1;
-  coreSelect.max = detectedCores;
-  coreSelect.value = String(start);
-
-  const paint = () => {
-    const v = Number(coreSelect.value);
-    $('coreVal').textContent = v + ' / ' + detectedCores;
-    // filled track up to the thumb
-    const pct = detectedCores > 1 ? ((v - 1) / (detectedCores - 1)) * 100 : 100;
-    coreSelect.style.background =
-      `linear-gradient(to right, var(--accent) ${pct}%, var(--border) ${pct}%)`;
-  };
-
-  $('coreHelp').textContent =
-    `The browser reports ${detectedCores} logical CPU thread(s). This sets how many files are processed at the same time.`;
-
-  coreSelect.addEventListener('input', paint);
-  coreSelect.addEventListener('change', () => lsSet(CORES_KEY, coreSelect.value));
-  paint();
-})();
-
-function getCores(){
-  const n = parseInt(coreSelect.value, 10);
-  return Math.min(detectedCores, Math.max(1, n || 1));
-}
 processBtn.addEventListener('click',async()=>{
   if(isProcessing || !items.length)return;
   isProcessing=true;batchOutput=null;
@@ -1371,7 +1307,7 @@ processBtn.addEventListener('click',async()=>{
       await processBatchTool();
     }else{
       const queue=items.filter(i=>i.status==='queued');
-      const concurrency=getCores(); 
+      const concurrency=getCores();
       let cursor=0;
       async function worker(){
         while(true){
