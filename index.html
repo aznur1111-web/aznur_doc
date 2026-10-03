@@ -166,6 +166,14 @@ footer{margin-top:46px;text-align:center;color:var(--muted);font-size:.85rem;pad
   </div>
 </div>
 
+  <div class="card">
+  <div class="fg" style="max-width:420px">
+    <label for="coreSelect">CPU Cores to Use</label>
+    <select id="coreSelect"></select>
+    <div class="help" id="coreHelp"></div>
+  </div>
+</div>
+
 <div class="upload-zone" id="dropZone">
   <div class="upload-icon">📁</div>
   <h2 id="dropTitle">Drop PDF files here</h2>
@@ -730,6 +738,7 @@ function renderUI(){
   filesSection.style.display=any?'block':'none';
   $('statsBar').style.display=any?'flex':'none';
   processBtn.disabled = isProcessing || !any;
+  if (typeof coreSelect !== 'undefined') coreSelect.disabled = isProcessing;
   downloadAllBtn.disabled = isProcessing || !(batchOutput || items.some(i=>i.blob));
   downloadAllBtn.style.display = outDir ? 'none' : '';
   batchResult.style.display=batchOutput?'flex':'none';
@@ -1293,7 +1302,29 @@ async function loadTesseract(){
   if(!tessPromise)tessPromise=loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js').catch(e=>{tessPromise=null;throw e;});
   return tessPromise;
 }
+/* ---------- CPU core selection ---------- */
+const CORES_KEY = 'aznurDocStudioCores_v1';
+const detectedCores = Math.max(1, Number(navigator.hardwareConcurrency) || 2);
+const coreSelect = $('coreSelect');
 
+(function initCores(){
+  for(let n = 1; n <= detectedCores; n++){
+    const label = n + (n === 1 ? ' core' : ' cores') + (n === detectedCores ? ' (all)' : '');
+    coreSelect.append(el('option', {value: String(n)}, label));
+  }
+  const saved = parseInt(lsGet(CORES_KEY), 10);
+  const fallback = Math.max(1, Math.floor(detectedCores / 2)); // sensible default: half
+  coreSelect.value = String(saved >= 1 && saved <= detectedCores ? saved : fallback);
+  $('coreHelp').textContent =
+    `Detected ${detectedCores} logical processor(s). This sets how many files are processed at the same time. ` +
+    `More cores is faster for many files but uses more RAM.`;
+  coreSelect.addEventListener('change', () => lsSet(CORES_KEY, coreSelect.value));
+})();
+
+function getCores(){
+  const n = parseInt(coreSelect.value, 10);
+  return Math.min(detectedCores, Math.max(1, n || 1));
+}
 processBtn.addEventListener('click',async()=>{
   if(isProcessing || !items.length)return;
   isProcessing=true;batchOutput=null;
@@ -1309,7 +1340,7 @@ processBtn.addEventListener('click',async()=>{
       await processBatchTool();
     }else{
       const queue=items.filter(i=>i.status==='queued');
-      const concurrency=2;
+      const concurrency=getCores(); 
       let cursor=0;
       async function worker(){
         while(true){
